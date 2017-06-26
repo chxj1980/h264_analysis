@@ -442,16 +442,16 @@ void read_seq_parameter_set_rbsp(h264_stream_t* h, bs_t* b)
 
   // NOTE can't read directly into sps because seq_parameter_set_id not yet known and so sps is not selected
 
-  int profile_idc = bs_read_u8(b);
-  int constraint_set0_flag = bs_read_u1(b);
+  int profile_idc = bs_read_u8(b);// 指明所用的profile，2bit
+  int constraint_set0_flag = bs_read_u1(b);// 等于1时，表示必须遵从一些规则，1bit，暂不分析，以下类似
   int constraint_set1_flag = bs_read_u1(b);
   int constraint_set2_flag = bs_read_u1(b);
   int constraint_set3_flag = bs_read_u1(b);
   int constraint_set4_flag = bs_read_u1(b);
   int constraint_set5_flag = bs_read_u1(b);
   int reserved_zero_2bits  = bs_read_u(b,2);  /* all 0's */
-  int level_idc = bs_read_u8(b);
-  int seq_parameter_set_id = bs_read_ue(b);
+  int level_idc = bs_read_u8(b);// 指明所用的level，1byte
+  int seq_parameter_set_id = bs_read_ue(b);// 指明本序列参数集的id号，4bytes
 
   // select the correct sps
   h->sps = h->sps_table[seq_parameter_set_id];
@@ -507,7 +507,7 @@ void read_seq_parameter_set_rbsp(h264_stream_t* h, bs_t* b)
   sps->pic_order_cnt_type = bs_read_ue(b);
   if( sps->pic_order_cnt_type == 0 )
   {
-    sps->log2_max_pic_order_cnt_lsb_minus4 = bs_read_ue(b);
+    sps->log2_max_pic_order_cnt_lsb_minus4 = bs_read_ue(b);// 指明了变量MaxPicOrderCntLsb的值
   }
   else if( sps->pic_order_cnt_type == 1 )
   {
@@ -522,9 +522,9 @@ void read_seq_parameter_set_rbsp(h264_stream_t* h, bs_t* b)
   }
   sps->num_ref_frames = bs_read_ue(b);
   sps->gaps_in_frame_num_value_allowed_flag = bs_read_u1(b);
-  sps->pic_width_in_mbs_minus1 = bs_read_ue(b);
-  sps->pic_height_in_map_units_minus1 = bs_read_ue(b);
-  sps->frame_mbs_only_flag = bs_read_u1(b);
+  sps->pic_width_in_mbs_minus1 = bs_read_ue(b);// 加1后指明以宏块为单位的图像宽度
+  sps->pic_height_in_map_units_minus1 = bs_read_ue(b);// 加1后指明以宏块为单位的图像高度
+  sps->frame_mbs_only_flag = bs_read_u1(b);// 等于1表示本序列中所有图像的编码模式都是帧，等于0表示还有场或帧场自适应
   if( !sps->frame_mbs_only_flag )
   {
     sps->mb_adaptive_frame_field_flag = bs_read_u1(b);

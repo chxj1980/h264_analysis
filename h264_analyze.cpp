@@ -217,6 +217,7 @@ int h264_analyze(int argc, char *argv[])
 char tempstr[1000]={0};
 //char* outputstr=(char *)malloc(100000);
 char outputstr[100000]={'\0'};
+
 //自己写的，解析NAL数据的函数
 char* probe_nal_unit(char* filename,int data_offset,int data_lenth){
   //清空字符串-----------------
