@@ -68,4 +68,5 @@ public:
 	CComboBox m_vh264lang;
 	afx_msg void OnSelchangeVH264Lang();
 	afx_msg void OnItemchangedVH264Nallist(NMHDR *pNMHDR, LRESULT *pResult);
+    void ShowMsg();
 };

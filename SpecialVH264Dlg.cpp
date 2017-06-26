@@ -140,7 +140,7 @@ BOOL CSpecialVH264Dlg::OnInitDialog()
 	m_vh264lang.InsertString(0,_T("Chinese"));
 	m_vh264lang.InsertString(1,_T("English"));
 
-	//_CrtSetBreakAlloc(5819);
+    ShowMsg();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -427,4 +427,18 @@ void CSpecialVH264Dlg::OnItemchangedVH264Nallist(NMHDR *pNMHDR, LRESULT *pResult
 
 
 	*pResult = 0;
+}
+
+void CSpecialVH264Dlg::ShowMsg()
+{
+  CString file = "./cuc_ieschool.h264";
+
+#ifdef _UNICODE
+  USES_CONVERSION;
+  strcpy(fileurl,W2A(file));
+#else
+  strcpy(fileurl,file);
+#endif
+
+  h264_nal_parse(this,fileurl);
 }
