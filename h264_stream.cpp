@@ -503,7 +503,7 @@ void read_seq_parameter_set_rbsp(h264_stream_t* h, bs_t* b)
       }
     }
   }
-  sps->log2_max_frame_num_minus4 = bs_read_ue(b);
+  sps->log2_max_frame_num_minus4 = bs_read_ue(b);// 指明frame_num所能达到的最大值
   sps->pic_order_cnt_type = bs_read_ue(b);
   if( sps->pic_order_cnt_type == 0 )
   {
@@ -934,14 +934,15 @@ void read_slice_header(h264_stream_t* h, bs_t* b)
   pps_t* pps = NULL;//h->pps;
   nal_t* nal = h->nal;
 
-  sh->first_mb_in_slice = bs_read_ue(b);
-  sh->slice_type = bs_read_ue(b);
-  sh->pic_parameter_set_id = bs_read_ue(b);
+  sh->first_mb_in_slice = bs_read_ue(b);// 片中第一个宏块的地址
+  sh->slice_type = bs_read_ue(b);// 片的类型
+  sh->pic_parameter_set_id = bs_read_ue(b);// 图像参数集的索引号
 
   pps = h->pps = h->pps_table[sh->pic_parameter_set_id];
   sps = h->sps = h->sps_table[pps->seq_parameter_set_id];
 
   sh->frame_num = bs_read_u(b, sps->log2_max_frame_num_minus4 + 4 ); // was u(v)
+  // frame_num最大值由SPS中的log2_max_frame_num_minus4指定
   if( !sps->frame_mbs_only_flag )
   {
     sh->field_pic_flag = bs_read_u1(b);
